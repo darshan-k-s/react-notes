@@ -29,7 +29,10 @@
 23. [Custom hooks](#customhooks)
 24. [Prop types](#proptypes)
 25. [React router](#reactrouter)
-26. 
+26. [React Memo](#memo)
+27. [useCallback](#usecallback)
+28. [useMemo](#usememo)
+29. 
 
 
 
@@ -871,7 +874,7 @@ return (<>
 
 
 
-<a name="css">CSS in React:</a>
+### <a name="css">CSS in React:</a>
 
 There are 3 ways to style React with CSS:
 
@@ -927,7 +930,7 @@ There are 3 ways to style React with CSS:
 
 
 
-<a name="scss">SCSS in React:</a>
+### <a name="scss">SCSS in React:</a>
 
 Sass files are executed on the server during compilation and sends CSS to the browser. 
 
@@ -974,7 +977,7 @@ They let us change the UI with specific re-rendering of components.
 
 
 
-<a name="state">State Hook:</a>
+### <a name="state">State Hook:</a>
 
 ```react
 // Importing the useState Hook from React:
@@ -1090,7 +1093,7 @@ function increase(){
 
 
 
-<a name="effect">Effect Hook:</a>
+### <a name="effect">Effect Hook:</a>
 
 The Effect Hook lets you perform side effects in function components(i.e making changes happen outside the component based on changes to the component). 
 
@@ -1214,7 +1217,7 @@ The cleanup function is widely use for API calls and HTTP requests.
 
 
 
-<a name="fetch">Fetch requests with React:</a>
+### <a name="fetch">Fetch requests with React:</a>
 
 > Basic one time load:
 
@@ -1259,7 +1262,7 @@ const UsersProfiles = () => {
 
 
 
-<a name="ajax">AJAX with loading and error:</a>
+### <a name="ajax">AJAX with loading and error:</a>
 
 ```react
 const url = 'https://api.github.com/users/QuincyLarsons';
@@ -1320,7 +1323,7 @@ const MultipleReturns = () => {
 
 
 
-<a name="showhide">Show/Hide conditionally:</a>
+### <a name="showhide">Show/Hide conditionally:</a>
 
 ```react
 const ShowHide = () => {
@@ -1361,7 +1364,7 @@ const Item = ()=>{
 
 
 
-<a name="form">Forms in React:</a>
+### <a name="form">Forms in React:</a>
 
 Unchanged JSX forms work the same way they do in plain HTML, the form will submit and the page will refresh. In HTML, form data is usually handled by the DOM. 
 
@@ -1504,7 +1507,7 @@ In React, the selected value is defined with a `value` attribute on the `select`
 
 
 
-<a name="useRef">useRef:</a>
+### <a name="useRef">useRef:</a>
 
 The `useRef` Hook allows you to persist values between renders, just like useState, but doesn't trigger re-renders when updated unlike useState. Generally used when we want to target a DOM element directly. 
 
@@ -1601,7 +1604,7 @@ function App() {
 
 
 
-<a name="useReducer">useReducer:</a>
+### <a name="useReducer">useReducer:</a>
 
 The `useReducer` hook is similar and a improvement over the `useState` hook. It allows for custom state logic. If you find yourself keeping track of multiple pieces of state that rely on complex logic, `useReducer` may be useful. 
 
@@ -1683,7 +1686,7 @@ This a really good way to handle complex state logic.
 
 
 
-<a name="propdrilling">Prop drilling:</a>
+### <a name="propdrilling">Prop drilling:</a>
 
 Prop drilling is basically a situation when the same data is being sent at almost every level due to requirements in the final level. If the smaller component needs a property that is on a high scope, that property has to passed to all the upper level components(even though not used), in order to reach the needed. 
 
@@ -1695,7 +1698,7 @@ This is avoided using `useContext` hook or redux. Commonly occurs when there are
 
 
 
-<a name="usecontext">React Context:</a> 
+### <a name="usecontext">React Context:</a> 
 
 React Context is a way to manage state globally. It can be used together with the `useState` Hook to share state between deeply nested components more easily than with `useState` alone and solves the problem of prop drilling. 
 
@@ -1800,7 +1803,7 @@ ReactDOM.render(<Component1 />, document.getElementById("root"));
 
 
 
-<a name="customhooks">Custom hooks:</a>
+### <a name="customhooks">Custom hooks:</a>
 
 Hooks are just reusable functions. When you have component logic that needs to be used by multiple components, we can extract that logic to a custom Hook. 
 
@@ -1887,7 +1890,7 @@ It is as simple as that.
 
 
 
-<a name="proptypes">Prop types:</a>
+### <a name="proptypes">Prop types:</a>
 
 When we make API calls and other fetch requests, we can never assume that the received data is perfect and will have to prepare for anomalies and missing data.
 
@@ -1942,7 +1945,329 @@ Combine all of them to have effective usage of `prop-types`.
 
 
 
-<a name="reactrouter">React Router:</a>
+### <a name="reactrouter">React Router:</a>
+
+Create React App doesn't include page routing. React Router is the most popular solution. With routing, we can emulate showing multiple pages in a single page application along with changes in the address bar. 
+
+> ###### Add react router:
+
+```bash
+npm install react-router-dom
+```
+
+> ###### Having a folder structure:
+
+Since we will have many pages, it is good practice to put them in one folder(`src/pages/`). 
+
+Each page we try to emulate is nothing but a React component and each file contains the whole page in that component. 
+
+> ###### Basic usage:
+
+We generally setup the routing in the `index.js`. 
+
+First import:
+
+```react
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+// Also import all the page components
+```
+
+
+
+We enclose everything that acts as a page in the `Router` tag which acts as the re-rendering container for all the pages. The `Route` tag  acts as the container for individual pages. 
+
+Everything inside the `Route` tag will be the content of that page. The `Route` tag has a few properties:
+
+1. `path` : This property defines the URL for rendering that page. `/` denotes the current URL. This way we can set custom page URLs. 
+2. `exact` : This property makes sure that this page is replaced by the new page, when the URLs have similar sub-strings. If there are substrings that match between two or more, all those pages are shown by default below each other. We use this property on the topmost page to avoid this bug. 
+
+`<Switch>` tag acts more or less like a switch statement and when a URL is given, the topmost `Route` whose path matches the URL will be rendered and nothing else. This is useful when setting up path with expressions. 
+
+Everything inside the `Router` tag but outside `Route` tags will always persist, no matter which page we are on. 
+
+```react
+const ReactRouterSetup = () => {
+  return <Router>
+    <Navbar/>
+    <Switch>
+      <Route exact path="/">
+        <Home/>
+      </Route>
+      <Route path="/about">
+        <About/>
+      </Route>
+      <Route path="/people">
+        <People/>
+      </Route>
+      <Route path="*">
+        <Error/>
+      </Route>
+    </Switch>
+  </Router>;
+};
+```
+
+
+
+> ###### Error page:
+
+We want the error page to show up when the URL in the sub domain is wrong. 
+
+```react
+<Route path="*">
+	<Error/>
+</Route>
+```
+
+Here, `*` represents all URLs. This means that this page will be rendered regardless of the URL. Hence, we put it the end of the `Switch` tag so that it is rendered only if all the other URLs don't match.  
+
+
+
+> ###### Links:
+
+The `a` tag won't work for routing in React. Anytime we link to an internal path, there exists a special `Link` tag for this purpose which comes with `react-router-dom`. 
+
+```react
+import { Link } from 'react-router-dom';
+// Usage of tag
+<Link to="/about">About</Link>
+```
+
+`to`: specifies the URL for the hyperlink.
+
+
+
+> ###### Dynamic routing:
+
+This is required when we have a large set of data, based on which routing has to be done.
+
+To achieve this, we use `Router` tag as a placeholder  and specify the component to be conditionally routed as `children` property, while also using variable expression for the `path`.  
+
+```react
+// In index.js
+<Route path="/person/:id" children={<Person/>}></Route>
+```
+
+Here, the `:` denotes that the succeeding path name is a variable. 
+
+ ```react
+ // In people.js
+ const People = () => {
+   const [people, setPeople] = useState(data);
+   return (
+     <div>
+       <h1>People Page</h1>
+       {people.map((person) => {
+         return (
+           <div key={person.id} className='item'>
+             <h4>{person.name}</h4>
+              // From here, the variable is automatically recognized 
+             <Link to={'/person/'+person.id}>See more</Link>
+           </div>
+         );
+       })}
+     </div>
+   );
+ };
+ ```
+
+We can then access the URL variable in the routed page using `useParams` hook from `react-router-dom`. 
+
+```react
+import { Link, useParams } from 'react-router-dom';
+const Person = () => {
+  const [name, setName] = useState('default name');
+  const { id } = useParams();
+
+  useEffect(() => {
+    const newPerson = data.find((person) => person.id === parseInt(id));
+    setName(newPerson.name);
+  }, []);
+  return (
+    <div>
+      <h1>{name}</h1>
+      <Link to='/people' className='btn'>
+        Back To People
+      </Link>
+    </div>
+  );
+};
+```
+
+
+
+---
+
+
+
+### <a name="memo">React Memo:</a>
+
+Using `memo` will cause React to skip rendering a component if its props have not changed. 
+
+This can improve performance. This is very useful when prop drilling and similar conditions are involved and by default, when a state is changed for container component, all the components within it and itself will be re-rendered. If this state isn't used in the UI directly, there is no use of re-rendering and hence Memo comes in use. 
+
+To use memo on a component, we just wrap the whole component inside the `memo` function.
+
+```react
+import Todos from "./Todos";
+
+const App = React.memo(() => {
+  const [count, setCount] = useState(0);
+  const [todos, setTodos] = useState(["todo 1", "todo 2"]);
+
+  const increment = () => {
+    setCount((c) => c + 1);
+  };
+
+  return (
+    <>
+      <Todos todos={todos} />
+      <hr />
+      <div>
+        Count: {count}
+        <button onClick={increment}>+</button>
+      </div>
+    </>
+  );
+});
+```
+
+We can also wrap the components when they are being exported. 
+
+Now the component only re-renders when the props that are passed to it are updated, regardless of state changes.
+
+
+
+---
+
+
+
+### <a name="usecallback">useCallback:</a>
+
+Every time a component re-renders, its functions get recreated.
+
+The React `useCallback` Hook returns a memoized callback function. Think of memoization as caching a value so that it does not need to be recalculated. This allows us to isolate resource intensive functions so that they will not automatically run on every render. 
+
+The `useCallback` Hook only runs when one of its dependencies update. This can improve performance.
+
+The `useCallback` and `useMemo` Hooks are similar. The main difference is that `useMemo` returns a memoized value(prevents function run) and `useCallback` returns a memoized function(prevents function recreation).
+
+To use it, just wrap the whole function in the `useCallback` hook.  
+
+```react
+const App = () => {
+  const [count, setCount] = useState(0);
+  const [todos, setTodos] = useState([]);
+
+  const increment = () => {
+    setCount((c) => c + 1);
+  };
+  // Won't be recreated when count changes
+  const addTodo = useCallback(() => {
+    setTodos((t) => [...t, "New Todo"]);
+  }, [todos]);
+
+  return (
+    <>
+      <Todos todos={todos} addTodo={addTodo} />
+      <hr />
+      <div>
+        Count: {count}
+        <button onClick={increment}>+</button>
+      </div>
+    </>
+  );
+};
+```
+
+
+
+> Usage for HTTP requests:
+
+This is an important usage case of `useCallback`, as we can't have HTTP requests happening every time a component re-renders.
+
+```react
+const useFetch = (url)=>{
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState([]);
+ 	
+    const getProducts = useCallback(async ()=>{
+        const response = await fetch(url);
+        const products = await response.json();
+        setProducts(products);
+        setLoading(false);
+    }, [url]);
+    
+    useEffect(()=>{
+        getProducts();
+    }, [url]);
+    
+    return {loading, products};
+}
+```
+
+
+
+---
+
+
+
+### <a name="usememo">useMemo:</a>
+
+The React `useMemo` Hook returns a memoized value. Think of memoization as caching a value so that it does not need to be recalculated. The `useMemo` Hook only runs when one of its dependencies update. 
+
+The `useMemo` Hook can be used to keep expensive, resource intensive functions from needlessly **running**. This can improve performance. We wrap the function we want inside the hook to use it.
+
+```react
+const App = () => {
+  const [count, setCount] = useState(0);
+  const [todos, setTodos] = useState([]);
+  const calculation = useMemo(() => expensiveCalculation(count), [count]);
+
+  const increment = () => {
+    setCount((c) => c + 1);
+  };
+  const addTodo = () => {
+    setTodos((t) => [...t, "New Todo"]);
+  };
+
+  return (
+    <div>
+      <div>
+        <h2>My Todos</h2>
+        {todos.map((todo, index) => {
+          return <p key={index}>{todo}</p>;
+        })}
+        <button onClick={addTodo}>Add Todo</button>
+      </div>
+      <hr />
+      <div>
+        Count: {count}
+        <button onClick={increment}>+</button>
+        <h2>Expensive Calculation</h2>
+        {calculation}
+      </div>
+    </div>
+  );
+};
+
+const expensiveCalculation = (num) => {
+  console.log("Calculating...");
+  for (let i = 0; i < 1000000000; i++) {
+    num += 1;
+  }
+  return num;
+};
+```
+
+
+
+
+
+
+
+
+
 
 
 
